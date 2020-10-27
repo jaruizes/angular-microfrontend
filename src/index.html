@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Micro Frontend Template</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script>
+    const channel = new BroadcastChannel("microfrontends");
+    channel.onmessage = function (e) {
+      console.log(e);
+    };
+
+    function changeLanguage(locale) {
+      channel.postMessage({
+        cmd: 'changeLocale',
+        payload: {
+          locale: locale
+        }
+      });
+    }
+
+  </script>
+</head>
+<body>
+  <div>
+    <p>Language</p>
+    <button onclick="changeLanguage('es')">ES</button>
+    <button onclick="changeLanguage('en')">EN</button>
+  </div>
+
+  <div style="margin-top: 2em">
+    <microfrontend-base locale="en"></microfrontend-base>
+  </div>
+
+</body>
+</html>

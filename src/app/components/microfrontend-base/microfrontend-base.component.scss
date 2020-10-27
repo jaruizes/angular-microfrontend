@@ -1,0 +1,80 @@
+@import '~bootstrap/scss/bootstrap.scss';
+
+
+.card-info {
+  padding: 2em;
+  background-color: var(--accountInfoBgColor, white);
+}
+
+.card-movements {
+  padding: 2em;
+  background-color: var(--accountMovementsBgColor, white);
+}
+
+h5{
+  font-size: 1.5em;
+}
+
+h4{
+  font-size: 2em;
+}
+
+h3, h4, h5{
+  line-height: 1.5em;
+  margin-bottom: 0.2em;
+}
+
+.content-section {
+  padding: 1rem;
+  background-color: var(--mainBgColor, white);
+}
+
+h2 {
+  font-size: 2.5vw;
+}
+
+a {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+
+  .container-fluid {
+    padding-left: 0.3em;
+    padding-right: 0.2em;
+  }
+  .card-info, .card-movements {
+    padding: 0.2em;
+  }
+
+  .card-title {
+    padding-bottom: 0;
+    padding-left: 0.4em;
+    margin-bottom: 0.5em;
+  }
+
+  h3, h4, h5{
+    line-height: 1.5em;
+    margin-bottom: 0.2em;
+  }
+
+  h3{
+    font-size: 5vw;
+  }
+
+  h5{
+    font-size: 2vw;
+  }
+
+  h4{
+    font-size: 2.5vw;
+  }
+
+  .card-body {
+    padding: 0.3em;
+  }
+
+  .content-section {
+    padding: 0.3em;
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "config": [
+    {
+      "id": "microfrontend-base-config",
+      "microfrontends": {},
+      "webcomponents": {
+        "items-table": "/webcomponents/items-table/v1/items-table.esm.js",
+        "card": "/webcomponents/credit-card/v1/credit-card.esm.js"
+      }
+    }
+  ]
+}
