@@ -12,8 +12,19 @@
   <script>
     const channel = new BroadcastChannel("microfrontends");
     channel.onmessage = function (e) {
-      console.log(e);
+      addEvent(e, "app");
     };
+
+    const localchannel = new BroadcastChannel("microfrontend-base-instance");
+    localchannel.onmessage = function (e) {
+      addEvent(e, "local");
+    };
+
+    function addEvent(event, channel) {
+      const pElement = document.createElement("p");
+      pElement.innerText = JSON.stringify(event.data);
+      document.getElementById(channel + "-events-received").appendChild(pElement);
+    }
 
     function changeLanguage(locale) {
       channel.postMessage({
@@ -24,18 +35,41 @@
       });
     }
 
+    document.getElementById("events-received");
+
   </script>
 </head>
-<body>
-  <div>
-    <p>Language</p>
-    <button onclick="changeLanguage('es')">ES</button>
-    <button onclick="changeLanguage('en')">EN</button>
-  </div>
+  <body>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"> Change Language</h5>
+        <div class="d-flex justify-content-start">
+          <button onclick="changeLanguage('es')">ES</button>
+          &nbsp;
+          <button onclick="changeLanguage('en')">EN</button>
+        </div>
+      </div>
+    </div>
 
-  <div style="margin-top: 2em">
-    <microfrontend-base locale="en"></microfrontend-base>
-  </div>
+    <div style="margin-top: 2em; margin-bottom: 2em">
+      <microfrontend-base
+              locale="en"
+              local-channel="microfrontend-base-instance">
+      </microfrontend-base>
+    </div>
 
-</body>
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Events received</h3>
+        <div style="border: lightgray solid 1px; padding: 1em">
+          <h5>Channel: App</h5>
+          <div id="app-events-received"></div>
+        </div>
+        <div style="border: lightgray solid 1px; padding: 1em; margin-top: 1em">
+          <h5>Channel: Local</h5>
+          <div id="local-events-received"></div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

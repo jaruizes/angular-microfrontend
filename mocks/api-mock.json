@@ -8,5 +8,23 @@
         "card": "/webcomponents/credit-card/v1/credit-card.esm.js"
       }
     }
+  ],
+  "examples": [
+    {
+      "id": "1",
+      "name": "example1"
+    },
+    {
+      "id": "2",
+      "name": "example2"
+    },
+    {
+      "id": "3",
+      "name": "example3"
+    },
+    {
+      "id": "4",
+      "name": "example4"
+    }
   ]
 }

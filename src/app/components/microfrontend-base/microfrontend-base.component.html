@@ -1,2 +1,28 @@
-<p>{{ 'title' | translate }}</p>
+<div *ngIf="initialized; then successBlock else errorBlock"></div>
+<ng-template #successBlock>
+    <div class="card example mx-auto">
+        <img class="card-img-top mx-auto" src="{{assets}}/img/angular.png" alt="Angular logo">
+        <div class="card-body">
+            <h5 class="card-title">{{ 'title' | translate }}</h5>
+            <div id="data">
+                <ul *ngFor="let example of examples">
+                    <li>{{example.id}}:{{example.name}} </li>
+                </ul>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-6 d-flex justify-content-end">
+                        <button (click)="sendEvent('local')">Send event to parent</button>
+                    </div>
+                    <div class="col-6 d-flex justify-content-start">
+                        <button (click)="sendEvent('app')">Send event to application</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #errorBlock>
+    Something was wrong....
+</ng-template>
 

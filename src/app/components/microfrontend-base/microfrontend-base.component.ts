@@ -2,6 +2,8 @@ import { Component, Input, NgZone, OnInit, ViewEncapsulation } from '@angular/co
 import { TranslateService } from '@ngx-translate/core';
 import { LoggerService } from '../../services/logger/logger.service';
 import { environment } from '../../../environments/environment';
+import { ExamplesService } from '../../services/examples/examples.service';
+import { Example } from '../../models/example';
 
 @Component({
     selector: 'app-main',
@@ -31,6 +33,21 @@ export class MicrofrontendBaseComponent implements OnInit {
     public appChannel: string;
 
     /**
+     * Examples array
+     */
+    public examples: Example[];
+
+    /**
+     * Environment
+     */
+    public assets: string;
+
+    /**
+     * Variable used by showing the component or not
+     */
+    public initialized: boolean;
+
+    /**
      * BroadcastChannel for application channel
      */
     private appBroadcastChannel: BroadcastChannel;
@@ -42,15 +59,54 @@ export class MicrofrontendBaseComponent implements OnInit {
 
     constructor(private ngZone: NgZone,
                 private translate: TranslateService,
+                private examplesService: ExamplesService,
                 private loggerService: LoggerService){
         this.locale = 'en';
         this.appChannel = 'microfrontends';
+        this.assets = environment.config.assets;
+        this.initialized = false;
     }
 
     ngOnInit() {
         this.initI18n();
         this.initEventsChannels();
-        this.appBroadcastChannel.postMessage({
+        this.initData();
+    }
+
+    /**
+     * Send an event through the specific channel (parent <-> child)
+     */
+    sendEvent(channel) {
+        const event = {
+            event: 'ButtonClicked',
+            payload: {
+                component: environment.config.name
+            }
+        };
+
+        let eventBus: BroadcastChannel = this.localBroadcastChannel;
+        if (channel === 'app') {
+            eventBus = this.appBroadcastChannel;
+        }
+        eventBus.postMessage(event);
+    }
+
+    /**
+     * Initializes data from API and sends ready event
+     */
+    private initData() {
+        this.examplesService.getExamples().subscribe((examples) => {
+            this.examples = examples;
+            this.sendReadyEvent();
+            this.initialized = true;
+        });
+    }
+
+    /**
+     * Sends ready event
+     */
+    private sendReadyEvent() {
+        this.localBroadcastChannel.postMessage({
             event: 'ComponentInitialized',
             payload: {
                 component: environment.config.name
@@ -62,7 +118,7 @@ export class MicrofrontendBaseComponent implements OnInit {
      * Handle messages received by the parent channel
      * @param message
      */
-    handleParentMessage(message) {
+    private handleParentMessage(message) {
         this.loggerService.log('Message received from parent: ' + message.cmd);
         if (message.cmd === 'changeLocale') {
             this.changeLocale(message.payload.locale);
@@ -73,7 +129,7 @@ export class MicrofrontendBaseComponent implements OnInit {
      * Handle messages received by the general broadcast channel
      * @param message
      */
-    handleApplicationMessages(message) {
+    private handleApplicationMessages(message) {
         this.loggerService.log('Message received from general channel: ' + message.cmd);
         if (message.cmd === 'changeLocale') {
             this.changeLocale(message.payload.locale);
@@ -96,7 +152,6 @@ export class MicrofrontendBaseComponent implements OnInit {
         this.locale = locale;
         this.translate.use(this.locale);
     }
-
 
     /**
      * Initializes the channels used by this microfrontend

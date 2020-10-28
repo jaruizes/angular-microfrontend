@@ -27,7 +27,8 @@ export const environment = {
   api: {
     base: apiBase,
     endpoints: {
-      config: `${apiBase}/config/${name}-config`
+      config: `${apiBase}/config/${name}-config`,
+      examples: `${apiBase}/examples/`
     }
   }
 };
